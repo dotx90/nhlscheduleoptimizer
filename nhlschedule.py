@@ -8,6 +8,7 @@ import os.path
 from pathlib import Path
 
 team_abreviations = {
+'ANA':  'anaheim-ducks',
 'BOS': 	'boston-bruins',
 'BUF': 	'buffalo-sabres',
 'CAR': 	'carolina-hurricanes',
@@ -67,19 +68,37 @@ def schedule_conflicts(roster_schedule_list, player_schedule_list):
 	conflict_games_list = []
 	available_games_list =[]
 	full_roster_dates = []
-	master_schedule = set(roster_schedule_list[0] + roster_schedule_list[1] + roster_schedule_list[2])
+	master_schedule = set() 
+	for x in range(len(roster_schedule_list)):
+		master_schedule.update(roster_schedule_list[x])
+
+	empty_elements = 3 - len(roster_schedule_list)
+	for x in range(empty_elements):
+		roster_schedule_list.append([None])
 
 	for player1, player2, player3 in itertools.combinations(roster_schedule_list, 3):
-
+		print(str(player1) + '\n')
+		print(str(player2) + '\n')
+		print(str(player3) + '\n')
 		for game_date in master_schedule:
+
+			print(game_date in player1 and game_date in player2)
+			print(game_date in player2 and game_date in player3)
+			print(game_date in player1 and game_date in player3)
+			
 			if game_date in player1 and game_date in player2:
 				full_roster_dates.append(game_date)
+				print("adding " + game_date + " to full roster schedule\n")
 
 			elif game_date in player2 and game_date in player3:
 				full_roster_dates.append(game_date)
+				print("adding " + game_date + " to full roster schedule\n")
 
 			elif game_date in player1 and game_date in player3:
 				full_roster_dates.append(game_date)
+				print("adding " + game_date + " to full roster schedule \n")
+			else:
+				print(game_date + " available\n")
 
 	for compared_player_game_date in player_schedule_list:
 		if compared_player_game_date in full_roster_dates:
